@@ -1,0 +1,8 @@
+{
+  "name": "PACKAGE NAME",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mccormicka/PACKAGE NAME.git"
+  }
+}
