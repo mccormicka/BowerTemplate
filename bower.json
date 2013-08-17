@@ -1,8 +1,9 @@
 {
-  "name": "PACKAGE_NAME",
-  "version": "0.0.0",
-  "main": "./index.js",
-  "dependencies": {
-    "angular": "~1.0.7"
-  }
+    "name": "PACKAGE_NAME",
+    "version": "0.0.0",
+    "main": "./lib/index.js",
+    "ignore": [
+        "node_modules",
+        "components"
+    ]
 }
