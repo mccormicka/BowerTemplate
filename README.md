@@ -1,0 +1,1 @@
+* Replace all instances of PACKAGE_NAME with your bower component name.

@@ -6,7 +6,7 @@ module.exports = function (grunt) {
         [ 'karma:setup', 'build', 'watch']);
 
     grunt.registerTask('build',
-        ['clean', 'shell:generateTests', 'jshint','karma:setup:run', 'requirejs:dev', 'requirejs:dist']);
+        ['clean', 'shell:generateTests', 'jshint', 'requirejs:dev', 'requirejs:dist', 'compass:dev', 'karma:setup:run']);
 
     // Project configuration.
     grunt.initConfig({
@@ -14,7 +14,7 @@ module.exports = function (grunt) {
 
         clean: {
             options: { force: true },
-            all: ['<%= pkg.name %>' + '.js', '<%= pkg.name %>' + '.min.js']
+            all: ['dist/<%= pkg.name %>.js' , 'dist/<%= pkg.name %>.min.js']
         },
 
         //Tests Client
@@ -55,17 +55,33 @@ module.exports = function (grunt) {
                 jshintrc: '.jshintrc'
             },
             files: {src: [
-                'lib/**/*.js',
-                'tests/**/*.js',
-                '!tests/karma*.js'
+                'scripts/**/*.js'
             ]}
         },
 
         watch: {
-            //run client tests with karma when client code changes (server needs to be already running, 'karma:test')
-            client: {
-                files: ['lib/**/*', 'tests/**/*.spec.js'],
-                tasks: ['build' ]
+            files: ['scripts/**/*'],
+            tasks: ['build']
+        },
+
+        //Compile stylesheets
+        compass: {
+            options: {
+                cssDir: 'dist/styles',
+                sassDir: 'styles',
+                imagesDir: 'sprites',
+                generatedImagesDir: 'dist/images/sprites',
+                httpGeneratedImagesPath: '/images/sprites'
+            },
+            dev: {
+                options: {
+                    outputStyle: 'expanded'
+                }
+            },
+            dist: {
+                options: {
+                    outputStyle: 'compressed'
+                }
             }
         },
 
@@ -73,26 +89,32 @@ module.exports = function (grunt) {
         requirejs: {
             dev: {
                 options: {
-                    name: 'lib/index',
+                    paths: {
+                        '<%= pkg.name %>': 'scripts/index'
+                    },
+                    name: '<%= pkg.name %>',
                     baseUrl: './',
                     mainConfigFile: 'require.config.js',
-                    out: '<%= pkg.name %>' + '.js',
-                    optimize: 'none',
-                    exclude: [
-                        'angular', 'lodash'
-                    ]
+                    out: 'dist/<%= pkg.name %>' + '.js',
+                    optimize: 'none'//,
+//                    exclude: [
+//                        'angular', 'text'
+//                    ]
 //                    useSourceUrl: true
                 }
             },
             dist: {
                 options: {
-                    name: 'lib/index',
+                    paths: {
+                        '<%= pkg.name %>': 'scripts/index'
+                    },
+                    name: '<%= pkg.name %>',
                     baseUrl: './',
                     mainConfigFile: 'require.config.js',
-                    out: '<%= pkg.name %>' + '.min.js',
-                    exclude: [
-                        'angular'
-                    ]
+                    out: 'dist/<%= pkg.name %>' + '.min.js'//,
+//                    exclude: [
+//                        'angular', 'text'
+//                    ]
                 }
             }
         }
@@ -111,5 +133,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     //Runs shell scripts
     grunt.loadNpmTasks('grunt-shell');
+    //CSS compass compiler
+    grunt.loadNpmTasks('grunt-contrib-compass');
 
 };
